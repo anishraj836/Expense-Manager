@@ -137,11 +137,13 @@ export const AddExpenseModal: React.FC<Props> = ({ onClose }) => {
             </div>
             
             {payerMode === 'single' ? (
-              <select className="input-group" style={{ width: '100%', marginTop: '8px' }} value={singlePayerId} onChange={e => setSinglePayerId(e.target.value)}>
-                {users.map(u => (
-                  <option key={u.id} value={u.id}>{u.name}</option>
-                ))}
-              </select>
+              <div className="input-group" style={{ marginTop: '8px' }}>
+                <select style={{ width: '100%' }} value={singlePayerId} onChange={e => setSinglePayerId(e.target.value)}>
+                  {users.map(u => (
+                    <option key={u.id} value={u.id}>{u.name}</option>
+                  ))}
+                </select>
+              </div>
             ) : (
               <div style={{ marginTop: '8px', maxHeight: '150px', overflowY: 'auto' }}>
                 {users.map(u => (
