@@ -14,6 +14,7 @@ interface AppContextType {
   addSettlement: (settlement: Omit<Settlement, 'id' | '_id'>) => Promise<void>;
   addUser: (user: Omit<User, 'id'>) => Promise<void>;
   createGroup: (name: string, description: string, members: string[]) => Promise<void>;
+  addGroupMember: (groupId: string, userId: string) => Promise<void>;
   getBalances: () => Record<string, number>; 
   dataWarning: string | null;
 }
@@ -205,6 +206,30 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   };
 
+  const addGroupMember = async (groupId: string, userId: string) => {
+    try {
+      const res = await fetch(`${API_BASE}/groups/${groupId}/members`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ userId })
+      });
+      
+      if (res.ok) {
+        const updatedGroup = await res.json();
+        setGroups(groups.map(g => g._id === updatedGroup._id ? updatedGroup : g));
+      } else {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to add member');
+      }
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
   // Simplifies debts matching creditors and debtors
   const getBalances = () => {
     const netBalances: Record<string, number> = {};
@@ -261,7 +286,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   return (
     <AppContext.Provider value={{
       currentUser, users, groups, expenses, settlements,
-      setCurrentUser, addExpense, addSettlement, addUser, createGroup, getBalances, dataWarning
+      setCurrentUser, addExpense, addSettlement, addUser, createGroup, getBalances, dataWarning, addGroupMember
     }}>
       {children}
     </AppContext.Provider>
