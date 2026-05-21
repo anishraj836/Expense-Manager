@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "echo 'Skipping build to prevent memory limit errors on Render. Dist folder is pre-built.'",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "cd backend && node server.js",
