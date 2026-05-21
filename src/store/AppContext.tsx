@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import type { User, Expense, Settlement } from '../types';
+import type { User, Expense, Settlement, Group } from '../types';
 import SHA256 from 'crypto-js/sha256';
 
 interface AppContextType {

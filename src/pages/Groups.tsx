@@ -61,7 +61,7 @@ export const Groups: React.FC = () => {
                 {group.members.length} members
               </p>
               <div style={{ display: 'flex', marginTop: '16px' }}>
-                {group.members.slice(0, 5).map((m: any, i) => (
+                {group.members.slice(0, 5).map((m: any, i: number) => (
                   <div key={m._id} className="avatar" style={{ 
                     width: '28px', height: '28px', fontSize: '0.7rem', 
                     marginLeft: i > 0 ? '-8px' : '0',
