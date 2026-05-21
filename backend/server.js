@@ -46,11 +46,19 @@ app.use('/api/users', userRoutes);
 app.use('/api/groups', require('./routes/groups'));
 
 // Serve frontend static files
-app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, '../dist'), {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.html')) {
+      // Force browser to always check for a new index.html
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  }
+}));
 
 // Catch-all route to serve the React app for any other URL (for React Router)
 app.use((req, res, next) => {
   if (req.method === 'GET') {
+    res.setHeader('Cache-Control', 'no-cache');
     res.sendFile(path.join(__dirname, '../dist/index.html'));
   } else {
     next();
