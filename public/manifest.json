@@ -8,7 +8,7 @@
   "theme_color": "#5b21b6",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "/wallet-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
