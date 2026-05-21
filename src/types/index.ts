@@ -5,6 +5,14 @@ export interface User {
   avatarUrl?: string;
 }
 
+export interface Group {
+  _id: string;
+  name: string;
+  description?: string;
+  members: User[];
+  createdBy: string;
+}
+
 export interface Split {
   userId: string;
   amount: number;
@@ -23,6 +31,7 @@ export interface Expense {
   date: string;
   payers: Payer[];
   splits: Split[];
+  groupId?: string;
   type?: 'expense' | 'settlement';
   status?: 'active' | 'superseded' | 'deleted';
   supersededBy?: string;

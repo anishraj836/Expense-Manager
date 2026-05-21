@@ -4,6 +4,7 @@ import { Layout } from './components/Layout';
 import { Dashboard } from './pages/Dashboard';
 import { Friends } from './pages/Friends';
 import { Activity } from './pages/Activity';
+import { Groups } from './pages/Groups';
 import { AuthPage } from './pages/AuthPage';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -18,9 +19,10 @@ const AppRoutes = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="friends" element={<Friends />} />
-          <Route path="activity" element={<Activity />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/activity" element={<Activity />} />
+          <Route path="/friends" element={<Friends />} />
+          <Route path="/groups" element={<Groups />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -27,6 +27,9 @@ export const Layout: React.FC = () => {
           <Link to="/friends" className={`nav-item ${location.pathname === '/friends' ? 'active' : ''}`}>
             <Users size={20} /> Friends
           </Link>
+          <Link to="/groups" className={`nav-item ${location.pathname === '/groups' ? 'active' : ''}`}>
+            <Users size={20} /> Groups
+          </Link>
           <Link to="/activity" className={`nav-item ${location.pathname === '/activity' ? 'active' : ''}`}>
             <Activity size={20} /> Recent Activity
           </Link>

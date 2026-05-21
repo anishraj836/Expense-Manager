@@ -6,12 +6,14 @@ import SHA256 from 'crypto-js/sha256';
 interface AppContextType {
   currentUser: User | null;
   users: User[];
+  groups: Group[];
   expenses: Expense[];
   settlements: Settlement[];
   setCurrentUser: (user: User | null) => void;
   addExpense: (expense: Omit<Expense, 'id' | '_id'>) => Promise<void>;
   addSettlement: (settlement: Omit<Settlement, 'id' | '_id'>) => Promise<void>;
   addUser: (user: Omit<User, 'id'>) => Promise<void>;
+  createGroup: (name: string, description: string, members: string[]) => Promise<void>;
   getBalances: () => Record<string, number>; 
   dataWarning: string | null;
 }
@@ -37,6 +39,7 @@ function computeHashLocally(txData: any, previousHash: string) {
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [users, setUsers] = useState<User[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [settlements, setSettlements] = useState<Settlement[]>([]);
   const [dataWarning, setDataWarning] = useState<string | null>(null);
@@ -67,6 +70,15 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         const usersData = await userRes.json();
         const mappedUsers = usersData.map((u: any) => ({ ...u, id: u._id }));
         setUsers(mappedUsers);
+
+        // Fetch groups
+        const groupsRes = await fetch(`${API_BASE}/groups`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (groupsRes.ok) {
+          const groupsData = await groupsRes.json();
+          setGroups(groupsData);
+        }
 
         // Fetch paginated transactions for the UI feed
         const txRes = await fetch(`${API_BASE}/transactions?page=1&limit=50`);
@@ -174,6 +186,23 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   };
 
+  const createGroup = async (name: string, description: string, members: string[]) => {
+    try {
+      const res = await fetch(`${API_BASE}/groups`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ name, description, members })
+      });
+      const newGroup = await res.json();
+      setGroups([...groups, newGroup]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // Simplifies debts matching creditors and debtors
   const getBalances = () => {
     const netBalances: Record<string, number> = {};
@@ -229,8 +258,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   return (
     <AppContext.Provider value={{
-      currentUser, users, expenses, settlements,
-      setCurrentUser, addExpense, addSettlement, addUser, getBalances, dataWarning
+      currentUser, users, groups, expenses, settlements,
+      setCurrentUser, addExpense, addSettlement, addUser, createGroup, getBalances, dataWarning
     }}>
       {children}
     </AppContext.Provider>
