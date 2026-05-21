@@ -6,12 +6,18 @@ import { useAppContext } from '../store/AppContext';
 export const Layout: React.FC = () => {
   const location = useLocation();
   const { currentUser, setCurrentUser, dataWarning } = useAppContext();
+  const [toastMessage, setToastMessage] = React.useState<string | null>(null);
 
   return (
     <div className="app-container">
       {dataWarning && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, background: 'var(--danger-color)', color: 'white', padding: '12px', textAlign: 'center', fontWeight: 'bold' }}>
           {dataWarning}
+        </div>
+      )}
+      {toastMessage && (
+        <div style={{ position: 'fixed', top: '20px', left: '50%', transform: 'translateX(-50%)', zIndex: 9999, background: 'var(--success-color, #10b981)', color: 'white', padding: '12px 24px', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', fontWeight: 'bold', animation: 'fadeIn 0.3s ease-out' }}>
+          {toastMessage}
         </div>
       )}
       <aside className="sidebar">
@@ -57,14 +63,14 @@ export const Layout: React.FC = () => {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                   });
-                  // If you have a toast notification showing here, we need to delay unmounting
-                  // so the user actually has time to read it before the screen redirects!
+                  setToastMessage('Account deleted successfully. We will miss you!');
                   setTimeout(() => {
                     localStorage.removeItem('token');
                     setCurrentUser(null);
-                  }, 2500); // 2.5 second delay
+                  }, 4000); // 4 second delay
                 } catch (e) {
                   console.error(e);
+                  setToastMessage('Error deleting account.');
                 }
               }
             }}
