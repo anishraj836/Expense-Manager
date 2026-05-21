@@ -15,7 +15,6 @@ const path = require('path');
 
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
@@ -38,16 +37,13 @@ app.use(express.json({ limit: '10mb' }));
 // Data Sanitization against NoSQL Query Injection
 app.use(mongoSanitize());
 
-// Data Sanitization against XSS (Cross Site Scripting)
-app.use(xss());
-
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/groups', require('./routes/groups'));
 
 // Serve frontend static files
-app.use(express.static(path.join(__dirname, '../dist'), {
+app.use(express.static(path.join(__dirname, 'public'), {
   setHeaders: (res, path) => {
     if (path.endsWith('.html')) {
       // Force browser to always check for a new index.html
@@ -60,7 +56,7 @@ app.use(express.static(path.join(__dirname, '../dist'), {
 app.use((req, res, next) => {
   if (req.method === 'GET') {
     res.setHeader('Cache-Control', 'no-cache');
-    res.sendFile(path.join(__dirname, '../dist/index.html'));
+    res.sendFile(path.join(__dirname, 'public/index.html'));
   } else {
     next();
   }
