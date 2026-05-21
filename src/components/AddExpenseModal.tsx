@@ -42,11 +42,11 @@ export const AddExpenseModal: React.FC<Props> = ({ onClose }) => {
       let sum = 0;
       splits = Object.keys(exactAmounts).map(id => {
         const amt = parseFloat(exactAmounts[id] || '0');
-        sum += amt;
-        return { userId: id, amount: amt };
+        sum += amt || 0;
+        return { userId: id, amount: amt || 0 };
       }).filter(s => s.amount > 0);
 
-      if (Math.abs(sum - totalAmount) > 0.01) {
+      if (isNaN(sum) || Math.abs(sum - totalAmount) > 0.01) {
         alert('Split amounts do not add up to total!');
         return;
       }
@@ -54,11 +54,11 @@ export const AddExpenseModal: React.FC<Props> = ({ onClose }) => {
       let sum = 0;
       splits = Object.keys(percentages).map(id => {
         const pct = parseFloat(percentages[id] || '0');
-        sum += pct;
-        return { userId: id, amount: (totalAmount * pct) / 100 };
+        sum += pct || 0;
+        return { userId: id, amount: (totalAmount * (pct || 0)) / 100 };
       }).filter(s => s.amount > 0);
 
-      if (Math.abs(sum - 100) > 0.01) {
+      if (isNaN(sum) || Math.abs(sum - 100) > 0.01) {
         alert('Percentages must add up to 100!');
         return;
       }
@@ -71,11 +71,11 @@ export const AddExpenseModal: React.FC<Props> = ({ onClose }) => {
       let payerSum = 0;
       payers = Object.keys(multiplePayers).map(id => {
         const amt = parseFloat(multiplePayers[id] || '0');
-        payerSum += amt;
-        return { userId: id, amount: amt };
+        payerSum += amt || 0;
+        return { userId: id, amount: amt || 0 };
       }).filter(p => p.amount > 0);
       
-      if (Math.abs(payerSum - totalAmount) > 0.01) {
+      if (isNaN(payerSum) || Math.abs(payerSum - totalAmount) > 0.01) {
         alert('Payer amounts do not add up to total!');
         return;
       }
