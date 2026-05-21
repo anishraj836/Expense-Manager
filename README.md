@@ -10,6 +10,7 @@ A highly scalable, cryptographically secure web application for tracking shared 
 - **High Security Authentication**: Strictly enforces logins via Google OAuth 2.0.
 - **Real-Time Dashboards**: Instantly calculates who you owe and who owes you.
 - **Cryptographic Security**: Uses an append-only Hash-Chain Ledger (similar to Blockchain). The frontend locally verifies the `SHA-256` hash of every transaction to ensure no admin has tampered with the MongoDB database.
+- **Enterprise Web Firewall**: Enforces strict DDoS Rate Limiting, NoSQL Injection prevention, and XSS payload sanitization using Helmet.js and Express Rate Limit.
 - **Highly Scalable**: Integrates Redis caching to instantly serve global balances and supports UI pagination for massive transaction histories.
 
 ## 🛠 Tech Stack
