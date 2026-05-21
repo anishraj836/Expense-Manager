@@ -14,7 +14,8 @@ function computeHash(txData, previousHash) {
     splits: txData.splits.map(s => ({ userId: s.userId.toString(), amount: s.amount })),
     status: txData.status,
     supersededBy: txData.supersededBy ? txData.supersededBy.toString() : null,
-    originalTxId: txData.originalTxId ? txData.originalTxId.toString() : null
+    originalTxId: txData.originalTxId ? txData.originalTxId.toString() : null,
+    attachmentBase64: txData.attachmentBase64 || null
   });
   return SHA256(dataString + previousHash).toString();
 }
@@ -53,7 +54,7 @@ router.get('/ledger', async (req, res) => {
     // For now, we return the minimal payload for local verification.
     const ledger = await Transaction.find()
       .sort({ createdAt: 1 })
-      .select('description amount date type payers splits status supersededBy originalTxId hash previousHash');
+      .select('description amount date type payers splits status supersededBy originalTxId hash previousHash attachmentBase64');
     res.json(ledger);
   } catch (err) {
     res.status(500).json({ error: err.message });

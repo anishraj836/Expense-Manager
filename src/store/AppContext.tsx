@@ -31,7 +31,8 @@ function computeHashLocally(txData: any, previousHash: string) {
     splits: txData.splits.map((s: any) => ({ userId: s.userId, amount: s.amount })),
     status: txData.status,
     supersededBy: txData.supersededBy || null,
-    originalTxId: txData.originalTxId || null
+    originalTxId: txData.originalTxId || null,
+    attachmentBase64: txData.attachmentBase64 || null
   });
   return SHA256(dataString + previousHash).toString();
 }
@@ -158,7 +159,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         date: settlement.date,
         type: 'settlement',
         payers: [{ userId: settlement.from, amount: settlement.amount }],
-        splits: [{ userId: settlement.to, amount: settlement.amount }]
+        splits: [{ userId: settlement.to, amount: settlement.amount }],
+        attachmentBase64: settlement.attachmentBase64
       };
       const res = await fetch(`${API_BASE}/transactions`, {
         method: 'POST',

@@ -47,6 +47,7 @@ export interface Settlement {
   to: string; // userId
   amount: number;
   date: string;
+  attachmentBase64?: string;
 }
 
 export interface Balance {

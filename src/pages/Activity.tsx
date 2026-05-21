@@ -80,6 +80,13 @@ export const Activity: React.FC = () => {
                     <p style={{ fontSize: '0.75rem', marginTop: '4px' }}>
                       {new Date(settlement.date).toLocaleDateString()}
                     </p>
+                    {settlement.attachmentBase64 && (
+                      <div style={{ marginTop: '8px' }}>
+                        <a href={settlement.attachmentBase64} target="_blank" rel="noreferrer" style={{ fontSize: '0.75rem', color: 'var(--primary-color)', textDecoration: 'none' }}>
+                          <span style={{ textDecoration: 'underline' }}>View Screenshot</span>
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </div>
                 

@@ -127,4 +127,23 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Delete current user account
+router.delete('/me', auth, async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    
+    // In a real app, you might also want to anonymize or handle their transactions
+    // and remove them from groups and friend lists. For now, just delete the user.
+    await User.updateMany(
+      { $or: [{ friends: req.userId }, { friendRequests: req.userId }] },
+      { $pull: { friends: req.userId, friendRequests: req.userId } }
+    );
+    
+    res.json({ message: 'User account deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

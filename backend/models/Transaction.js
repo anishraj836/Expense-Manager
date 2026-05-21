@@ -21,6 +21,7 @@ const transactionSchema = new mongoose.Schema({
   splits: [splitSchema],
   
   groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' }, // optional group
+  attachmentBase64: { type: String }, // For storing screenshot of settlement
   
   // Immutability and Audit Logs
   status: { type: String, enum: ['active', 'superseded', 'deleted'], default: 'active' },

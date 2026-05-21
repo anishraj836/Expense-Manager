@@ -35,16 +35,37 @@ export const Layout: React.FC = () => {
           </Link>
         </nav>
         
-        <div style={{ padding: '20px', borderTop: '1px solid var(--border-color)' }}>
+        <div style={{ padding: '20px', borderTop: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <button 
             className="btn btn-outline" 
-            style={{ width: '100%', borderColor: 'var(--danger-color)', color: 'var(--danger-color)' }}
+            style={{ width: '100%', borderColor: 'var(--text-muted)', color: 'var(--text-muted)' }}
             onClick={() => {
               localStorage.removeItem('token');
               setCurrentUser(null);
             }}
           >
             Logout
+          </button>
+          <button 
+            className="btn btn-outline" 
+            style={{ width: '100%', borderColor: 'var(--danger-color)', color: 'var(--danger-color)' }}
+            onClick={async () => {
+              if (window.confirm('Are you sure you want to completely delete your account? This cannot be undone.')) {
+                try {
+                  const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:3000/api');
+                  await fetch(`${API_BASE}/users/me`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                  });
+                  localStorage.removeItem('token');
+                  setCurrentUser(null);
+                } catch (e) {
+                  console.error(e);
+                }
+              }
+            }}
+          >
+            Delete Account
           </button>
         </div>
       </aside>

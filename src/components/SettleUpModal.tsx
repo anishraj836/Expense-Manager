@@ -20,6 +20,23 @@ export const SettleUpModal: React.FC<Props> = ({
   const [payerId, setPayerId] = useState(defaultPayerId || currentUser!.id);
   const [payeeId, setPayeeId] = useState(defaultPayeeId || users.find(u => u.id !== payerId)?.id || '');
   const [amount, setAmount] = useState(defaultAmount ? String(defaultAmount) : '');
+  const [attachmentBase64, setAttachmentBase64] = useState<string>('');
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        alert('File size too large. Max 2MB allowed.');
+        e.target.value = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAttachmentBase64(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSave = () => {
     const totalAmount = parseFloat(amount);
@@ -29,7 +46,8 @@ export const SettleUpModal: React.FC<Props> = ({
       from: payerId,
       to: payeeId,
       amount: totalAmount,
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
+      attachmentBase64
     });
     
     onClose();
@@ -75,6 +93,23 @@ export const SettleUpModal: React.FC<Props> = ({
               step="0.01"
               autoFocus
             />
+          </div>
+          
+          <div className="input-group">
+            <label>Attach Screenshot / Receipt (Optional)</label>
+            <input 
+              type="file" 
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ fontSize: '0.85rem' }}
+            />
+            {attachmentBase64 && (
+              <img 
+                src={attachmentBase64} 
+                alt="Preview" 
+                style={{ marginTop: '8px', maxHeight: '100px', objectFit: 'contain', border: '1px solid var(--border-color)', borderRadius: '4px' }}
+              />
+            )}
           </div>
         </div>
         
