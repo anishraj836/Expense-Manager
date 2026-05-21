@@ -57,8 +57,12 @@ export const Layout: React.FC = () => {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                   });
-                  localStorage.removeItem('token');
-                  setCurrentUser(null);
+                  // If you have a toast notification showing here, we need to delay unmounting
+                  // so the user actually has time to read it before the screen redirects!
+                  setTimeout(() => {
+                    localStorage.removeItem('token');
+                    setCurrentUser(null);
+                  }, 2500); // 2.5 second delay
                 } catch (e) {
                   console.error(e);
                 }
