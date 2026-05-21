@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   name: { type: String, required: true },
   avatarUrl: { type: String },
+  upiId: { type: String },
+  paymentQrBase64: { type: String },
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   friendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, { timestamps: true });

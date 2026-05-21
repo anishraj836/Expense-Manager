@@ -3,6 +3,8 @@ export interface User {
   name: string;
   email: string;
   avatarUrl?: string;
+  upiId?: string;
+  paymentQrBase64?: string;
 }
 
 export interface Group {

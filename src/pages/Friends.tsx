@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../store/AppContext';
 import { UserPlus, Search, Check } from 'lucide-react';
 
 export const Friends: React.FC = () => {
+  const navigate = useNavigate();
   const { getBalances } = useAppContext();
   const [friends, setFriends] = useState<any[]>([]);
   const [friendRequests, setFriendRequests] = useState<any[]>([]);
@@ -125,7 +127,11 @@ export const Friends: React.FC = () => {
             const balance = balances[user._id] || 0;
             return (
               <div key={user._id} className="list-item">
-                <div className="list-item-left">
+                <div 
+                  className="list-item-left" 
+                  style={{ cursor: 'pointer' }} 
+                  onClick={() => navigate(`/profile/${user._id}`)}
+                >
                   <div className="avatar" style={{ width: '48px', height: '48px', fontSize: '1.2rem' }}>
                     {user.name.charAt(0)}
                   </div>

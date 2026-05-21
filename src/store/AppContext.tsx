@@ -15,6 +15,7 @@ interface AppContextType {
   addUser: (user: Omit<User, 'id'>) => Promise<void>;
   createGroup: (name: string, description: string, members: string[]) => Promise<void>;
   addGroupMember: (groupId: string, userId: string) => Promise<void>;
+  updateProfile: (updates: Partial<User>) => Promise<void>;
   getBalances: () => Record<string, number>; 
   dataWarning: string | null;
 }
@@ -230,6 +231,27 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   };
 
+  const updateProfile = async (updates: Partial<User>) => {
+    try {
+      const res = await fetch(`${API_BASE}/users/me`, {
+        method: 'PATCH',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(updates)
+      });
+      if (res.ok) {
+        const updatedUser = await res.json();
+        setCurrentUser({ ...updatedUser, id: updatedUser._id });
+        // Also update in users list if present
+        setUsers(users.map(u => u.id === updatedUser._id ? { ...updatedUser, id: updatedUser._id } : u));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // Simplifies debts matching creditors and debtors
   const getBalances = () => {
     const netBalances: Record<string, number> = {};
@@ -286,7 +308,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   return (
     <AppContext.Provider value={{
       currentUser, users, groups, expenses, settlements,
-      setCurrentUser, addExpense, addSettlement, addUser, createGroup, getBalances, dataWarning, addGroupMember
+      setCurrentUser, addExpense, addSettlement, addUser, createGroup, getBalances, dataWarning, addGroupMember, updateProfile
     }}>
       {children}
     </AppContext.Provider>

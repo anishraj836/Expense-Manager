@@ -146,4 +146,32 @@ router.delete('/me', auth, async (req, res) => {
   }
 });
 
+// Update current user profile
+router.patch('/me', auth, async (req, res) => {
+  try {
+    const { upiId, paymentQrBase64 } = req.body;
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    if (upiId !== undefined) user.upiId = upiId;
+    if (paymentQrBase64 !== undefined) user.paymentQrBase64 = paymentQrBase64;
+
+    await user.save();
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get a specific user profile
+router.get('/:id', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('name email avatarUrl upiId paymentQrBase64');
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

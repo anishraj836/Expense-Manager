@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Activity, Wallet } from 'lucide-react';
+import { LayoutDashboard, Users, Activity, Wallet, User as UserIcon } from 'lucide-react';
 import { useAppContext } from '../store/AppContext';
 
 export const Layout: React.FC = () => {
@@ -38,6 +38,9 @@ export const Layout: React.FC = () => {
           </Link>
           <Link to="/activity" className={`nav-item ${location.pathname === '/activity' ? 'active' : ''}`}>
             <Activity size={20} /> Recent Activity
+          </Link>
+          <Link to="/profile" className={`nav-item ${location.pathname.startsWith('/profile') ? 'active' : ''}`}>
+            <UserIcon size={20} /> Profile
           </Link>
         </nav>
         
