@@ -1,0 +1,17 @@
+{
+  "name": "Expense Manager",
+  "short_name": "Expenses",
+  "description": "Securely split expenses with friends and groups.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f4f6",
+  "theme_color": "#5b21b6",
+  "icons": [
+    {
+      "src": "/wallet-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

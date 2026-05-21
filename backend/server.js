@@ -19,6 +19,7 @@ const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Enterprise Security Headers
 app.use(helmet({ contentSecurityPolicy: false })); 
