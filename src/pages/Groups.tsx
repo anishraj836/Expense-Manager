@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../store/AppContext';
 import { Users, Plus, X } from 'lucide-react';
 
 export const Groups: React.FC = () => {
+  const navigate = useNavigate();
   const { groups, users, currentUser, createGroup, addGroupMember } = useAppContext();
   const [showCreate, setShowCreate] = useState(false);
   const [showAddMember, setShowAddMember] = useState(false);
@@ -71,7 +73,7 @@ export const Groups: React.FC = () => {
       ) : (
         <div className="dashboard-grid">
           {groups.map(group => (
-            <div key={group._id} className="card">
+            <div key={group._id} className="card" style={{ cursor: 'pointer', transition: 'transform 0.2s', border: '1px solid var(--border-color)' }} onClick={() => navigate(`/groups/${group._id}`)}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{ padding: '12px', borderRadius: '12px', backgroundColor: 'rgba(91, 33, 182, 0.1)', color: 'var(--primary-color)' }}>
@@ -85,7 +87,10 @@ export const Groups: React.FC = () => {
                 <button 
                   className="btn" 
                   style={{ padding: '6px 12px', fontSize: '0.85rem', backgroundColor: 'var(--bg-secondary)' }}
-                  onClick={() => openAddMemberModal(group)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openAddMemberModal(group);
+                  }}
                 >
                   <Plus size={14} style={{ marginRight: '4px' }}/> Add
                 </button>

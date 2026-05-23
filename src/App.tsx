@@ -5,6 +5,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Friends } from './pages/Friends';
 import { Activity } from './pages/Activity';
 import { Groups } from './pages/Groups';
+import { GroupDetails } from './pages/GroupDetails';
 import { Profile } from './pages/Profile';
 import { AuthPage } from './pages/AuthPage';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -24,6 +25,7 @@ const AppRoutes = () => {
           <Route path="/activity" element={<Activity />} />
           <Route path="/friends" element={<Friends />} />
           <Route path="/groups" element={<Groups />} />
+          <Route path="/groups/:id" element={<GroupDetails />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/:id" element={<Profile />} />
         </Route>
